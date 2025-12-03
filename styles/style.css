@@ -7,7 +7,29 @@ body {
   font-style: normal;
 }
 
+
 #category-container .btn-category {
   justify-content: flex-start;
   text-align: left;
+  padding-left: 3;
+}
+
+.btn-category {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: black !important;
+  text-align: left;
+  padding-left: 15px;
+  
+}
+
+.active-category{
+  background-color: #16a34a !important;
+  color: white !important;
+  margin-left: -15px;
+  width : calc(100% + 15px) !important;
+  border-radius: 5px;
+  padding-left: 30px !important;
+
 }
