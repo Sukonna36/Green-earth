@@ -33,3 +33,10 @@ body {
   padding-left: 30px !important;
 
 }
+
+.category-tag {
+  background: #DCFCE7 !important;
+  color : #15803D !important;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
