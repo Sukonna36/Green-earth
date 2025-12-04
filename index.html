@@ -15,7 +15,8 @@
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
 
 
 
@@ -39,9 +40,9 @@
     </div>
   </nav>
 
-  <header class="header bg-[#CFF0DC] flex justify-between items-center w-full ">
-    <div class="min-w-[250px]">
-      <img src="assets/hero-leaf1.png">
+  <header class="header bg-[#CFF0DC] flex flex-col md:flex-row justify-between items-center w-full px-4 py-6 gap-4">
+    <div class="w-full md:min-w-[250px]">
+      <img src="assets/hero-leaf1.png" class="w-full h-auto object-contain">
     </div>
 
     <div class="text-center space-y-4 max-w-[400px] mx-auto">
@@ -54,8 +55,8 @@
     </div>
 
 
-    <div class="min-w-[250px]">
-      <img src="assets/hero-leaf2.png">
+    <div class="w-full md:min-w-[250px]">
+      <img src="assets/hero-leaf2.png" class="w-full h-auto object-contain">
     </div>
 
   </header>
@@ -65,33 +66,38 @@
     <div class="text-center text-3xl font-semibold pt-10">
      Choose Your Trees
     </div>
-    <section
-      class=" grid grid-cols-12 mt-5 ml-10 mr-10 mb-10 gap-5 w=11/12 mx-auto min-h-screen">
+    <section class="grid grid-cols-1 md:grid-cols-12 items-stretch mt-5 mb-10 gap-5 w-11/12 max-w-[1250px] mx-auto min-h-screen">
 
-
-      <div class="col-span-2 p-3">
-        <h1 class="text-xl font-bold text-left rounded-2xl mb-5 "> Categories </h1>
-
+      <div class="col-span-2 sm:col-span-1 md:col-span-2 p-3 h-full flex flex-col items-center md:items-start">
+      <h1 class="text-xl font-bold text-left rounded-2xl mb-5 "> Categories </h1>
         <!-- cetagories -->
 
-        <div class="grid grid-cols-1 gap-3 " id="category-container" >
-          
+        <div class="grid grid-cols-1 gap-3 w-full" id="category-container"></div>  
         </div>
 
 
-      </div>
 
-
-      <div class="col-span-8 p-3" id="plants-container">
-        <div class="grid grid-cols-3 gap-3">
+      <div class="col-span-8 sm:col-span-1  md:col-span-8 p-3 h-full" id="plants-container">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
 
         </div>
       </div>
 
 
-      <div class="col-span-2 p-3  bg-white">
-        <h1>Your Cart</h1>
-      </div>
+      <div class="col-span-2 sm:col-span-1 md:col-span-2 mt-3 p-3 rounded-md bg-white mb-3">
+        <div class="w-full max-w-[280px] mx-auto">
+        <h1 class="font-bold text-md">Your Cart</h1>
+        <div id="cart-items" class="space-y-2 border-b border-gray-300 pb-3">
+          </div>
+
+          <div class="pt-3"></div>
+          <div class="flex justify-between text-black text-sm">
+          <h2 class="font-bold">Total:</h2>
+          <p id="total-amount" class="font-bold">৳0</p>
+          </div>
+        </div>
+        </div>
+    
 
 
     </section>

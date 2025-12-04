@@ -3,6 +3,31 @@ const categoryContainer = document.getElementById('category-container');
 const plantsContainer = document.querySelector("#plants-container .grid");
 
 
+function updateTotal() { 
+  const cartItemsContainer = document.getElementById("cart-items");
+ 
+
+  let total = 0;
+
+  const items = cartItemsContainer.querySelectorAll("div[data-plant-id]");
+
+  items.forEach(item => {
+    const priceText = item.querySelector("span.text-gray-400").childNodes[0].textContent.trim();
+   const price = parseInt(priceText.replace('৳', '').trim());
+
+    const quantityText = item.querySelector(".quantity").innerText.replace("×", "");
+    const quantity = parseInt(quantityText);
+
+    total += price * quantity;
+  });
+
+  const totalAmount = document.getElementById("total-amount");
+  totalAmount.innerText = `৳${total}`;
+
+}
+
+
+
 const fetchPlantData = async () => {
   const request = await fetch(`https://openapi.programming-hero.com/api/plants`);
   const response = await request.json();
@@ -17,12 +42,9 @@ const fetchDatafromCategory = async () => {
 
 // show plant function
 
-const showPlant = async (url) =>{
-
-  console.log("Fetching URL:", url);
+const showPlant = async (url, limit = null) =>{
 const plant = await fetch(url);
 const responseData = await plant.json();
-console.log("API Response:", responseData);
   plantsContainer.innerHTML = "";
 
   let finalPlantsArray = [];
@@ -33,14 +55,14 @@ if (Array.isArray(responseData.plants)) {
 else if (Array.isArray(responseData.data)) {
     finalPlantsArray = responseData.data;  
 }
+if(limit){
+  finalPlantsArray = finalPlantsArray.slice(0, limit);
+}
 
 if(finalPlantsArray.length === 0){
   plantsContainer.innerHTML = "<h1 class='text-3xl font-bold text-center col-span-4'>No Plants Found</h1>";
   return;
 }
-
-
-
 
   finalPlantsArray.forEach(plant =>{
     const card = document.createElement("div");
@@ -50,15 +72,56 @@ if(finalPlantsArray.length === 0){
     <h1 class="text-xl font-bold">${plant.name}</h1>
             <p>${plant.description ? plant.description.substring(0,100) + "..." : "No description"}</p>
             <div class="flex justify-between">
-              <h2 class="category-tag">${plant.category}</h2>   
+             <h2 class="category-tag">${plant.category_name || plant.category}</h2>   
               <h2>৳${plant.price || 500}</h2>
             </div>
-            <button class="btn bg-green-700 text-white rounded-full w-40">Add to Cart</button>
+            <button class="btn bg-green-700 text-white rounded-full w-full text-center py-2">Add to Cart</button>
              `;
              plantsContainer.appendChild(card);
+
+    const addTocartBtn = card.querySelector("button");
+    
+    addTocartBtn.addEventListener("click", () => {
+      if(!plant.count) plant.count = 0;
+      plant.count++ ;
+      const cartItemsContainer = document.getElementById("cart-items");
+       let existingCartItem = cartItemsContainer.querySelector(`div[data-plant-id='${plant.id}']`);
+
+        
+      if (existingCartItem) {
+        const quantitySpan = existingCartItem.querySelector(".quantity");
+        quantitySpan.innerText = `×${plant.count}`;
+        updateTotal();
+
+      }
+      else {
+      const cartItem = document.createElement("div");
+      cartItem.classList.add("flex","flex-row", "justify-between", "items-center", "p-2", "rounded-md", "shadow", "bg-[#CFF0DC]");
+      cartItem.setAttribute("data-plant-id", plant.id); // ✅ add this
+      cartItem.innerHTML = `<div>
+       <span >${plant.name}</span><br>
+       <span class="text-gray-400">৳${plant.price || 500} <span class="quantity text-gray-400">×${plant.count}</span></span> 
+       </div>
+       <div>
+       <button class="remove-btn text-gray-400 font-bold px-2">×</button>
+        </div> `;
+      cartItemsContainer.appendChild(cartItem);
+        updateTotal();
+
+
+    const removeBtn = cartItem.querySelector(".remove-btn");
+    removeBtn.addEventListener("click", () => {
+      cartItem.remove();
+      plant.count = 0;
+      updateTotal();
   });
 
- };
+    }
+  
+ });
+});
+};
+
 
 const init = async () => {
   const allCategories = await fetchDatafromCategory();
@@ -71,21 +134,16 @@ const init = async () => {
 
 
   allButton.addEventListener("click", async () => {
-  document.querySelectorAll(".btn-category").forEach(btn => {
-    btn.classList.remove("active-category");
-  });
-
+  document.querySelectorAll(".btn-category").forEach(btn => btn.classList.remove("active-category"));
   allButton.classList.add("active-category");
-  
   const allPlantsUrl = `https://openapi.programming-hero.com/api/plants`;
-  await showPlant(allPlantsUrl);
-  
+  await showPlant(allPlantsUrl, 6);
 });
 
 
   allCategories.categories.map((category) => {
     const button = document.createElement("button");
-    button.classList.add("btn", "btn-block", "shadow","btn-category");
+    button.classList.add("btn","shadow","btn-category","w-auto","mx-auto","md:w-full", );
     button.innerText =category.category_name;
 
     button.addEventListener("click",async () =>{
@@ -94,11 +152,12 @@ const init = async () => {
       const categoryUrl = `https://openapi.programming-hero.com/api/category/${category.id}`;
       await showPlant(categoryUrl);
       });
-    categoryContainer.appendChild(button);
-           })
-      allButton.click();
 
-}
+    categoryContainer.appendChild(button);
+    });
+
+      allButton.click();
+  }
 
 init();
 
