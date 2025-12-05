@@ -15,10 +15,11 @@ body {
   background: none !important;
   border: none !important;
   box-shadow: none !important;
-  outline: none !important;
-  justify-content: flex-start !important;
+  color: black !important;
   text-align: left !important;
   padding-left: 15px !important;
+  outline: none !important;
+  justify-content: flex-start !important;
   width: 100% !important;
   cursor: pointer !important;
 }
@@ -26,9 +27,10 @@ body {
 #category-container .btn-category.active-category {
   background-color: #16a34a !important;
   color: white !important;
+  margin-left: -15px !important;
+  width: calc(100% + 15px) !important;
   border-radius: 5px !important;
   padding-left: 30px !important;
-  width: calc(100% + 15px) !important;
 }
 
 @media (max-width: 768px) {
