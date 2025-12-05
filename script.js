@@ -43,9 +43,17 @@ const fetchDatafromCategory = async () => {
 // show plant function
 
 const showPlant = async (url, limit = null) =>{
-const plant = await fetch(url);
+plantsContainer.innerHTML = `
+  <div class="w-full col-span-full text-center py-10">
+    <span class="loading loading-dots loading-xl text-green-700"></span>
+  </div>
+`;
+
+  const plant = await fetch(url);
 const responseData = await plant.json();
   plantsContainer.innerHTML = "";
+
+
 
   let finalPlantsArray = [];
 
@@ -85,7 +93,8 @@ if(finalPlantsArray.length === 0){
       if(!plant.count) plant.count = 0;
       plant.count++ ;
       const cartItemsContainer = document.getElementById("cart-items");
-       let existingCartItem = cartItemsContainer.querySelector(`div[data-plant-id='${plant.id}']`);
+      const plantId = plant.id || plant.plant_id;
+      let existingCartItem = cartItemsContainer.querySelector(`div[data-plant-id='${plantId}']`);
 
         
       if (existingCartItem) {
@@ -97,7 +106,8 @@ if(finalPlantsArray.length === 0){
       else {
       const cartItem = document.createElement("div");
       cartItem.classList.add("flex","flex-row", "justify-between", "items-center", "p-2", "rounded-md", "shadow", "bg-[#CFF0DC]");
-      cartItem.setAttribute("data-plant-id", plant.id); // ✅ add this
+      const plantId = plant.id || plant.plant_id;
+      cartItem.setAttribute("data-plant-id", plantId);
       cartItem.innerHTML = `<div>
        <span >${plant.name}</span><br>
        <span class="text-gray-400">৳${plant.price || 500} <span class="quantity text-gray-400">×${plant.count}</span></span> 
@@ -161,3 +171,24 @@ const init = async () => {
 
 init();
 
+
+
+const nameInput = document.getElementById('nameInput');
+const emailInput = document.getElementById('emailInput');
+const dropdownButton = document.getElementById('dropdownButton');
+const donateButton = document.getElementById('donateButton');
+const treeDropdown = document.getElementById('treeDropdown');
+
+donateButton.addEventListener('click', () => {
+  nameInput.value = '';
+  emailInput.value = '';
+  dropdownButton.innerHTML = 'Number of Trees <i class="fa-solid fa-circle-chevron-down"></i>';
+});
+
+treeDropdown.addEventListener('click', (e) => {
+  const target = e.target;
+  if(target.tagName === 'A') {
+    e.preventDefault();
+    dropdownButton.innerHTML = target.textContent + ' <i class="fa-solid fa-circle-chevron-down"></i>';
+  }
+});
